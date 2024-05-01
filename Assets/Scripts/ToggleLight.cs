@@ -17,7 +17,7 @@ public class ToggleLight : MonoBehaviour
 
     void Update()
     {
-        if (RaySystem.hasFlashlight)
+        if (RaySystem.hasFlashlight && !PlayerMovement.isBusy)
         {
             if (Input.GetKeyDown(KeyCode.F) && !spotlight.enabled) // on
             {

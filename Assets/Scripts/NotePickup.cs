@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,12 +17,16 @@ public class NotePickup : MonoBehaviour
 
     public string tag;
 
+    private AudioSource source;
+    public AudioClip notePickupClip;
+
     // Start is called before the first frame update
     void Start()
     {
         noteImage.enabled = false;
         noteText.enabled = false;
         clickImage.enabled = false;
+        source = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -79,6 +84,7 @@ public class NotePickup : MonoBehaviour
         noteText.enabled = true;
         clickImage.enabled = false;
         info.text = null;
+        source.PlayOneShot(notePickupClip);
     }
 
     void NoteDown()
