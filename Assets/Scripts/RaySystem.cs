@@ -56,12 +56,25 @@ public class RaySystem : MonoBehaviour
                 crosshair.enabled = false;
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
+                    Destroy(hit.collider.gameObject);
+                    source.Stop();
+                    source.PlayOneShot(pickupClip);
+                    hasFlashlight = true;
+                }
+            }
+
+            if (hit.collider.tag == "seed")
+            {
+                info.text = "Pick up";
+                clickImage.enabled = true;
+                crosshair.enabled = false;
+                if (Input.GetKeyDown(KeyCode.Mouse0))
+                {
                     items++;
                     itemsText.text = items + "";
                     Destroy(hit.collider.gameObject);
                     source.Stop();
                     source.PlayOneShot(pickupClip);
-                    hasFlashlight = true;
                 }
             }
         }
