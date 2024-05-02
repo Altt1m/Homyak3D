@@ -51,6 +51,18 @@ public class PlayerMovement : MonoBehaviour
                     //бежит
                     animator.SetInteger("Switch", 2);
                 }
+                else if (Input.GetKey(KeyCode.LeftShift) && (Input.GetAxis("Horizontal") > 0 || Input.GetAxis("Horizontal") < 0))
+                {
+                    movespeed = 6.5f;
+                    //идет
+                    animator.SetInteger("Switch", 2);
+                }
+                else if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") < 0)
+                {
+                    movespeed = 4.5f;
+                    //идет
+                    animator.SetInteger("Switch", 2);
+                }
                 else
                 {
                     movespeed = 3f;
