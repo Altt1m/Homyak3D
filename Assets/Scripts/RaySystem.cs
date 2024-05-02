@@ -71,7 +71,7 @@ public class RaySystem : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
                     items++;
-                    itemsText.text = items + "";
+                    itemsText.text = items + "/5";
                     Destroy(hit.collider.gameObject);
                     source.Stop();
                     source.PlayOneShot(pickupClip);
