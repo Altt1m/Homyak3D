@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: 8f8a853920a0ec841994bb253d0d54da
+  - enabled: 1
+    path: Assets/Scenes/Escape From Homyak.unity
+    guid: 9be229b70ac132c4ebcf0474663860e1
   m_configObjects: {}

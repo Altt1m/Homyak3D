@@ -21,13 +21,15 @@ public class EnemyController : MonoBehaviour
     private bool isChasing = false;
     public Light pointLight;
     private int i;
+    private float distanceToPlayer;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         navMeshAgent = GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
+        player = PlayerMovement.Instance.transform;
+        //player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
 
         TargetUpdate();
     }
@@ -37,7 +39,9 @@ public class EnemyController : MonoBehaviour
         if(!player) return;
         
         // Проверка, находится ли игрок в пределах дальности обнаружения
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        OnTriggerEnter();
 
         if (distanceToPlayer <= detectionRange)
         {
@@ -51,7 +55,7 @@ public class EnemyController : MonoBehaviour
                     {
                         LookTarget();
                         isChasing = true;
-                        pointLight.color = Color.red;
+                        if (distanceToPlayer > 1f) pointLight.color = Color.red;
                         chaseTimer = chaseDuration;
 
                         if (!hasPlayed)
@@ -151,6 +155,14 @@ public class EnemyController : MonoBehaviour
         prevTargets.Add(newTarget);
     }
 
+    void OnTriggerEnter()
+    {
+        // Проверяем, столкнулись ли мы с коллайдером игрока
+        if (distanceToPlayer < 1f)
+        {
+            pointLight.color = Color.blue;
+        }
+    }
 
 
     void LookTarget()
