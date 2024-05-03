@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Scenes : MonoBehaviour
 {
-    public void ChangeScenes(int numberScenes)
+    public void ChangeScenes()
     {
-        SceneManager.LoadScene(numberScenes);
+        SceneManager.LoadScene("Escape From Homyak");
     }
 }

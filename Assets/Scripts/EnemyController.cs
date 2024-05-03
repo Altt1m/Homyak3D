@@ -28,11 +28,16 @@ public class EnemyController : MonoBehaviour
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         navMeshAgent = GetComponent<NavMeshAgent>();
-        player = PlayerMovement.Instance.transform;
         //player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
 
         TargetUpdate();
     }
+
+    private void Awake()
+    {
+        player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
+    }
+
 
     void Update()
     {
