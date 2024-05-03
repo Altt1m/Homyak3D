@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
     private Transform player;    // Ссылка на стартовую точку
-    private Transform target;
+    private List<Transform> prevTargets = new List<Transform>();
     private Animator animator;
     private AudioSource audioSource;
     public AudioClip audioClip;
@@ -84,20 +85,73 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            if (navMeshAgent.transform.position == navMeshAgent.pathEndPosition)
+            if (navMeshAgent.remainingDistance <= 0.1 && !navMeshAgent.pathPending)
             {
                 TargetUpdate();
             }
             pointLight.color = Color.yellow;
         }
     }
-    
+
+    //void TargetUpdate()
+    //{
+    //    i = Random.Range(0, targets.Count);
+    //    navMeshAgent.SetDestination(targets[i].position);
+    //    Debug.Log("New target set: " + targets[i].name);
+    //}
+
     void TargetUpdate()
     {
-        i = Random.Range(0, targets.Count);
-        navMeshAgent.SetDestination(targets[i].position);
-        Debug.Log("New target set: " + targets[i].name);
+        // Создаем словарь для хранения пар точек и расстояний до них
+        Dictionary<Transform, float> targetDistances = new Dictionary<Transform, float>();
+
+        // Заполняем словарь и вычисляем расстояния
+        foreach (Transform target in targets)
+        {
+            float distance = Vector3.Distance(transform.position, target.position);
+            targetDistances.Add(target, distance);
+        }
+
+        // Сортируем словарь по возрастанию расстояний
+        var sortedTargets = targetDistances.OrderBy(pair => pair.Value);
+
+        // Получаем первые пять ближайших точек
+        List<Transform> closestTargets = sortedTargets.Select(pair => pair.Key).Take(6).ToList();
+
+        // Удаляем предыдущие цели из списка ближайших
+        if (prevTargets.Any())
+        {
+            foreach (Transform targetTransform in prevTargets)
+            {
+                closestTargets.Remove(targetTransform);
+            }
+        }
+
+        // Выбираем случайную точку из оставшихся
+        if (closestTargets.Count > 0)
+        {
+            int randomIndex = Random.Range(0, closestTargets.Count);
+            Transform selectedTarget = closestTargets[randomIndex];
+
+            // Обновляем список предыдущих целей
+            UpdatePrevTargets(selectedTarget);
+
+            navMeshAgent.SetDestination(selectedTarget.position);
+            Debug.Log("New target set: " + selectedTarget.name);
+        }
     }
+
+    void UpdatePrevTargets(Transform newTarget)
+    {
+        // Если в списке предыдущих целей уже есть 3 элемента, удаляем самый старый
+        if (prevTargets.Count == 4)
+        {
+            prevTargets.RemoveAt(0);
+        }
+        prevTargets.Add(newTarget);
+    }
+
+
 
     void LookTarget()
     {
