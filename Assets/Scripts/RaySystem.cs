@@ -22,7 +22,7 @@ public class RaySystem : MonoBehaviour
 
     private void Start()
     {
-        itemsText.text = "0";
+        itemsText.text = "0/5";
         source = GetComponent<AudioSource>();
     }
 

@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
             Vector3 playerMovementInput = new Vector3(horizontal, 0.0f, vertical);
             Vector3 moveVector = transform.TransformDirection(playerMovementInput);
 
-            if (Input.GetAxis("Vertical") > 0 || Input.GetAxis("Vertical") < 0 || Input.GetAxis("Horizontal") > 0 || Input.GetAxis("Horizontal") < 0)
+            if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
             {
                 if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") > 0)
                 {
@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
                     //бежит
                     animator.SetInteger("Switch", 2);
                 }
-                else if (Input.GetKey(KeyCode.LeftShift) && (Input.GetAxis("Horizontal") > 0 || Input.GetAxis("Horizontal") < 0))
+                else if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Horizontal") != 0)
                 {
                     movespeed = 6.5f;
                     //идет

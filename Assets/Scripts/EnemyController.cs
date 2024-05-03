@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
     private Transform player;    // Ссылка на стартовую точку
+    private Transform target;
     private Animator animator;
     private AudioSource audioSource;
     public AudioClip audioClip;
@@ -16,40 +15,42 @@ public class EnemyController : MonoBehaviour
     public float chaseDuration = 5f;     // Продолжительность преследования
     public LayerMask layerMask;
     private NavMeshAgent navMeshAgent;
+    public List<Transform> targets;
     private float chaseTimer;
     private bool isChasing = false;
-    private Vector3 originalPosition;
+    public Light pointLight;
+    private int i;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         navMeshAgent = GetComponent<NavMeshAgent>();
-        originalPosition = transform.position;
         player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
+
+        TargetUpdate();
     }
 
     void Update()
     {
-        if(!player)
-            return;
+        if(!player) return;
         
         // Проверка, находится ли игрок в пределах дальности обнаружения
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
         if (distanceToPlayer <= detectionRange)
         {
-            LookTarget();
-
             // Стреляем рейкастом в направлении игрока
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, player.position - transform.position, out hit, 10, layerMask))
+            if (Physics.Raycast(transform.position, player.position - transform.position, out hit, detectionRange, layerMask))
             {
                 if (hit.collider.tag == "player")
                 {
                     if (!isChasing)
                     {
+                        LookTarget();
                         isChasing = true;
+                        pointLight.color = Color.red;
                         chaseTimer = chaseDuration;
 
                         if (!hasPlayed)
@@ -78,13 +79,24 @@ public class EnemyController : MonoBehaviour
             {
                 // Время истекло или игрок вышел из дальности обнаружения
                 isChasing = false;
-                navMeshAgent.SetDestination(originalPosition);
+                TargetUpdate();
             }
         }
         else
         {
-            navMeshAgent.SetDestination(originalPosition);
+            if (navMeshAgent.transform.position == navMeshAgent.pathEndPosition)
+            {
+                TargetUpdate();
+            }
+            pointLight.color = Color.yellow;
         }
+    }
+    
+    void TargetUpdate()
+    {
+        i = Random.Range(0, targets.Count);
+        navMeshAgent.SetDestination(targets[i].position);
+        Debug.Log("New target set: " + targets[i].name);
     }
 
     void LookTarget()
