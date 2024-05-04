@@ -11,7 +11,8 @@ public class EnemyController : MonoBehaviour
     private List<Transform> prevTargets = new List<Transform>();
     private Animator animator;
     private AudioSource audioSource;
-    public AudioClip audioClip;
+    public AudioClip found;
+    public AudioClip attacked;
     private bool hasPlayed = false;
     public float detectionRange = 10f;   // Дальность обнаружения игрока
     public LayerMask layerMask;
@@ -66,7 +67,7 @@ public class EnemyController : MonoBehaviour
                         if (!hasPlayed)
                         {
                             audioSource.Stop();
-                            audioSource.PlayOneShot(audioClip);
+                            audioSource.Play();
                             hasPlayed = true;
                         }
                         
@@ -88,6 +89,7 @@ public class EnemyController : MonoBehaviour
             {
                 // Время истекло или игрок вышел из дальности обнаружения
                 isChasing = false;
+                audioSource.Stop();
                 pointLight.color = Color.yellow;
                 TargetUpdate();
             }
@@ -165,6 +167,7 @@ public class EnemyController : MonoBehaviour
         // Проверяем, столкнулись ли мы с коллайдером игрока
         if (distanceToPlayer < 2.5f && playerAlive)
         {
+            audioSource.Stop(); audioSource.PlayOneShot(attacked);
             playerAlive = false;
             SceneTransition.SwitchToScene("Death Scene");
         }
