@@ -15,7 +15,8 @@ public class RaySystem : MonoBehaviour
     public Image clickImage;
 
     public static bool hasFlashlight = false;
-    public int items = 0;
+    public static int items = 0;
+    private int itemsCollected = 0;
     public Text itemsText;
     private AudioSource source;
     public AudioClip pickupClip;
@@ -70,8 +71,8 @@ public class RaySystem : MonoBehaviour
                 crosshair.enabled = false;
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    items++;
-                    itemsText.text = items + "/5";
+                    items++; itemsCollected++;
+                    itemsText.text = itemsCollected + "/5";
                     Destroy(hit.collider.gameObject);
                     source.Stop();
                     source.PlayOneShot(pickupClip);

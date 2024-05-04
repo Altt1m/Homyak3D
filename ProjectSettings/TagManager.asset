@@ -13,6 +13,8 @@ TagManager:
   - note 4
   - note 5
   - seed
+  - mon1
+  - mon2
   layers:
   - Default
   - TransparentFX

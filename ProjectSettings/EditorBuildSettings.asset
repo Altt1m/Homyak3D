@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Escape From Homyak.unity
     guid: 9be229b70ac132c4ebcf0474663860e1
+  - enabled: 1
+    path: Assets/Scenes/Death Scene.unity
+    guid: 95bdd86fd4dc22d4694b522c2fb29de5
   m_configObjects: {}

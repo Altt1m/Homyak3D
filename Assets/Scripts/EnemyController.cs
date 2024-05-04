@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class EnemyController : MonoBehaviour
 {
@@ -13,7 +14,6 @@ public class EnemyController : MonoBehaviour
     public AudioClip audioClip;
     private bool hasPlayed = false;
     public float detectionRange = 10f;   // Дальность обнаружения игрока
-    public float chaseDuration = 5f;     // Продолжительность преследования
     public LayerMask layerMask;
     private NavMeshAgent navMeshAgent;
     public List<Transform> targets;
@@ -22,6 +22,7 @@ public class EnemyController : MonoBehaviour
     public Light pointLight;
     private int i;
     private float distanceToPlayer;
+    private bool playerAlive = true;
 
     void Start()
     {
@@ -60,8 +61,7 @@ public class EnemyController : MonoBehaviour
                     {
                         LookTarget();
                         isChasing = true;
-                        if (distanceToPlayer > 1f) pointLight.color = Color.red;
-                        chaseTimer = chaseDuration;
+                        if (distanceToPlayer > 2.5f) pointLight.color = Color.red;
 
                         if (!hasPlayed)
                         {
@@ -83,12 +83,12 @@ public class EnemyController : MonoBehaviour
         if (isChasing)
         {
             navMeshAgent.SetDestination(player.position);
-            chaseTimer -= Time.deltaTime;
 
-            if (chaseTimer <= 0f || distanceToPlayer > detectionRange)
+            if (distanceToPlayer > detectionRange)
             {
                 // Время истекло или игрок вышел из дальности обнаружения
                 isChasing = false;
+                pointLight.color = Color.yellow;
                 TargetUpdate();
             }
         }
@@ -98,7 +98,7 @@ public class EnemyController : MonoBehaviour
             {
                 TargetUpdate();
             }
-            pointLight.color = Color.yellow;
+
         }
     }
 
@@ -163,9 +163,10 @@ public class EnemyController : MonoBehaviour
     void OnTriggerEnter()
     {
         // Проверяем, столкнулись ли мы с коллайдером игрока
-        if (distanceToPlayer < 1f)
+        if (distanceToPlayer < 2.5f && playerAlive)
         {
-            pointLight.color = Color.blue;
+            playerAlive = false;
+            SceneTransition.SwitchToScene("Death Scene");
         }
     }
 
