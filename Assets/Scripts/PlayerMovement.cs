@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 Velocity;
     private Vector2 angle;
     public Transform cameraTransform; //камера внутри игрока
-    public static bool isBusy = false;
+    public static bool isBusy;
 
     private CharacterController charactercontroller;
 
@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
         Cursor.visible = false;
 
         isSeated = false;
+        isBusy = false;
     }
 
     private void Update()

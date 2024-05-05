@@ -80,6 +80,10 @@ public class RaySystem : MonoBehaviour
                     source.Stop();
                     source.PlayOneShot(pickupClip);
                 }
+                if (itemsCollected == 5)
+                {
+                    EnemyController.seedsFound = true;
+                }
             }
         }
         else

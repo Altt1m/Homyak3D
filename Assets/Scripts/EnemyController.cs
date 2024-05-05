@@ -24,6 +24,7 @@ public class EnemyController : MonoBehaviour
     private int i;
     private float distanceToPlayer;
     private bool playerAlive = true;
+    public static bool seedsFound;
 
     void Start()
     {
@@ -31,9 +32,10 @@ public class EnemyController : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
+        seedsFound = false;
 
         TargetUpdate();
-        InvokeRepeating("UpdateTarget", 30f, 120f); // Вызываем функцию обновления цели каждые 120 секунд
+        InvokeRepeating("UpdateTarget", 75f, 50f); // Вызываем функцию обновления цели каждые 120 секунд
     }
 
     void UpdateTarget()
@@ -101,14 +103,16 @@ public class EnemyController : MonoBehaviour
                 navMeshAgent.speed = 10;
                 audioSource.Stop();
                 pointLight.color = Color.yellow;
-                TargetUpdate();
+                if (!seedsFound) TargetUpdate();
+                else navMeshAgent.SetDestination(targets.Find(n => n.name == "Target Cemetery").position);
             }
         }
         else
         {
             if (navMeshAgent.remainingDistance <= 0.1 && !navMeshAgent.pathPending)
             {
-                TargetUpdate();
+                if (!seedsFound) TargetUpdate();
+                else navMeshAgent.SetDestination(targets.Find(n => n.name == "Target Cemetery").position);
             }
 
         }
