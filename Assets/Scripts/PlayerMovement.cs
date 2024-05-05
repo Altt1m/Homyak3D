@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -13,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     private float mouseY;
     private float vertical;
     private float horizontal;
+    private bool isSeated;
 
     public Vector2 clampangle;
     private Vector3 Velocity;
@@ -31,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        isSeated = false;
     }
 
     private void Update()
@@ -43,29 +47,53 @@ public class PlayerMovement : MonoBehaviour
             Vector3 playerMovementInput = new Vector3(horizontal, 0.0f, vertical);
             Vector3 moveVector = transform.TransformDirection(playerMovementInput);
 
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                cameraTransform.position = new Vector3(transform.position.x, transform.position.y+0.75f, transform.position.z);
+                isSeated = true;
+            }
+            else
+            {
+                cameraTransform.position = new Vector3(transform.position.x, transform.position.y+1.5f, transform.position.z);
+                isSeated = false;
+            }
+
             if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
             {
+                if (!isSeated)
+                {
+                    cameraTransform.position = new Vector3(transform.position.x, transform.position.y+1.5f, transform.position.z);
+                }
+                
                 if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") > 0)
                 {
-                    movespeed = 8;
+                    if (!isSeated)
+                    {
+                        movespeed = 8;
+                    }
+                    else movespeed = 4;
+
                     //бежит
                     animator.SetInteger("Switch", 2);
                 }
                 else if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Horizontal") != 0)
                 {
-                    movespeed = 6.5f;
+                    if (!isSeated) movespeed = 6.5f;
+                    else movespeed = 3f;
                     //идет
                     animator.SetInteger("Switch", 2);
                 }
                 else if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") < 0)
                 {
-                    movespeed = 4.5f;
+                    if (!isSeated) movespeed = 4.5f;
+                    else movespeed = 2f;
                     //идет
                     animator.SetInteger("Switch", 2);
                 }
                 else
                 {
-                    movespeed = 3f;
+                    if (!isSeated) movespeed = 3f;
+                    else movespeed = 2f;
                     //идет
                     animator.SetInteger("Switch", 1);
                 }

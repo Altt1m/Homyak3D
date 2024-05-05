@@ -61,6 +61,7 @@ public class EnemyController : MonoBehaviour
                     if (!isChasing)
                     {
                         LookTarget();
+                        navMeshAgent.speed = 6;
                         isChasing = true;
                         if (distanceToPlayer > 2.5f) pointLight.color = Color.red;
 
@@ -89,6 +90,7 @@ public class EnemyController : MonoBehaviour
             {
                 // Время истекло или игрок вышел из дальности обнаружения
                 isChasing = false;
+                navMeshAgent.speed = 15;
                 audioSource.Stop();
                 pointLight.color = Color.yellow;
                 TargetUpdate();

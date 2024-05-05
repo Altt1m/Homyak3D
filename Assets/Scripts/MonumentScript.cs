@@ -65,7 +65,7 @@ public class MonumentScript : MonoBehaviour
         if (seedDown == 5 && !gameFinished)
         {
             gameFinished = true;
-            SceneTransition.SwitchToScene("Win Scene"); 
+            SceneTransition.SwitchToScene("Win Scene");
         }
     }
 }

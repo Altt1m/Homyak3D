@@ -14,9 +14,9 @@ public class RaySystem : MonoBehaviour
     public Image crosshair;
     public Image clickImage;
 
-    public static bool hasFlashlight = false;
-    public static int items = 0;
-    private int itemsCollected = 0;
+    public static bool hasFlashlight;
+    public static int items;
+    private int itemsCollected;
     public Text itemsText;
     private AudioSource source;
     public AudioClip pickupClip;
@@ -25,6 +25,9 @@ public class RaySystem : MonoBehaviour
     {
         itemsText.text = "0/5";
         source = GetComponent<AudioSource>();
+        items = 0;
+        itemsCollected = 0;
+        hasFlashlight = false;
     }
 
     void LateUpdate()

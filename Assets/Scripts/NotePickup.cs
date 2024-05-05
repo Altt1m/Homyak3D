@@ -20,6 +20,8 @@ public class NotePickup : MonoBehaviour
     private AudioSource source;
     public AudioClip notePickupClip;
 
+    private GameObject noteToDestroy;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +45,7 @@ public class NotePickup : MonoBehaviour
 
             if (hit.collider.tag == tag)
             {
+                noteToDestroy = hit.collider.gameObject;
                 if (!noteImage.enabled)
                 {
                     info.text = "Note";
@@ -72,7 +75,7 @@ public class NotePickup : MonoBehaviour
             {
                 NoteDown();
 
-                Destroy(hit.collider.gameObject);
+                Destroy(noteToDestroy);
             }
         }
     }
