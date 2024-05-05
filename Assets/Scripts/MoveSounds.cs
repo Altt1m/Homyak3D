@@ -8,11 +8,11 @@ public class MoveSounds : MonoBehaviour
 
     private AudioSource source;
     public AudioClip[] clips;
-    private Material material;
+    //private Material material;
 
     private bool ismoving = false;
     private bool isrunning = false;
-    private int currentmaterial = 0;
+    //private int currentmaterial = 0;
     public float timebetweensounds = 0.8f;
 
 
@@ -25,7 +25,7 @@ public class MoveSounds : MonoBehaviour
 
     void Update()
     {
-        RaycastHit hit;
+        //RaycastHit hit;
 
         if (Input.GetAxis("Vertical") > 0 || Input.GetAxis("Vertical") < 0 || Input.GetAxis("Horizontal") > 0 || Input.GetAxis("Horizontal") < 0)
         {

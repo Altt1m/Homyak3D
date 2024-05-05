@@ -30,15 +30,23 @@ public class EnemyController : MonoBehaviour
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         navMeshAgent = GetComponent<NavMeshAgent>();
-        //player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
+        player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
 
         TargetUpdate();
+        InvokeRepeating("UpdateTarget", 30f, 120f); // Вызываем функцию обновления цели каждые 120 секунд
     }
 
-    private void Awake()
+    void UpdateTarget()
     {
         player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
+        navMeshAgent.SetDestination(player.position);
+        Debug.Log("New target set: " + player.name);
     }
+
+    //private void Awake()
+    //{
+    //    player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
+    //}
 
 
     void Update()
@@ -90,7 +98,7 @@ public class EnemyController : MonoBehaviour
             {
                 // Время истекло или игрок вышел из дальности обнаружения
                 isChasing = false;
-                navMeshAgent.speed = 15;
+                navMeshAgent.speed = 10;
                 audioSource.Stop();
                 pointLight.color = Color.yellow;
                 TargetUpdate();
