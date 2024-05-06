@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -26,6 +28,12 @@ public class PlayerMovement : MonoBehaviour
 
     private Animator animator;
 
+    public Image StaminaBar;
+    public static float Stamina, MaxStamina, RunCost, ChargeRate;
+
+    private Coroutine recharge;
+    private bool canRun;
+
     private void Start()
     {
         charactercontroller = GetComponent<CharacterController>();
@@ -35,7 +43,13 @@ public class PlayerMovement : MonoBehaviour
         Cursor.visible = false;
 
         isSeated = false;
-        isBusy = false;
+        //isBusy = false;
+        canRun = true;
+
+        Stamina = 100f;
+        MaxStamina = 100f;
+        RunCost = 8f;
+        ChargeRate = 15f;
     }
 
     private void Update()
@@ -66,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
                     cameraTransform.position = new Vector3(transform.position.x, transform.position.y+1.5f, transform.position.z);
                 }
                 
-                if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") > 0)
+                if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") > 0 && canRun)
                 {
                     if (!isSeated)
                     {
@@ -77,14 +91,14 @@ public class PlayerMovement : MonoBehaviour
                     //бежит
                     animator.SetInteger("Switch", 2);
                 }
-                else if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Horizontal") != 0)
+                else if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Horizontal") != 0 && canRun)
                 {
                     if (!isSeated) movespeed = 6.5f;
                     else movespeed = 3f;
                     //идет
                     animator.SetInteger("Switch", 2);
                 }
-                else if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") < 0)
+                else if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") < 0 && canRun)
                 {
                     if (!isSeated) movespeed = 4.5f;
                     else movespeed = 2f;
@@ -104,6 +118,19 @@ public class PlayerMovement : MonoBehaviour
                 //стоит
                 animator.SetInteger("Switch", 0);
             }
+
+            if (animator.GetInteger("Switch") == 2)
+            {
+                Stamina -= RunCost * Time.deltaTime;
+                if (Stamina < 0) Stamina = 0;
+                StaminaBar.fillAmount = Stamina / MaxStamina;
+
+                if (recharge != null) StopCoroutine(recharge);
+                recharge = StartCoroutine(RechargeStamina());
+            }
+
+            if (Stamina == 0) canRun = false;
+            else if (Stamina >= 5) canRun = true;
 
             if (charactercontroller.isGrounded)
             {
@@ -133,6 +160,21 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             animator.SetInteger("Switch", 0);
+        }
+    }
+
+    private IEnumerator RechargeStamina()
+    {
+        yield return new WaitForSeconds(.1f);
+
+        if (Stamina == 0) yield return new WaitForSeconds(1.5f);
+
+        while (Stamina < MaxStamina)
+        {
+            Stamina += ChargeRate / 100f;
+            if (Stamina > MaxStamina) Stamina = MaxStamina;
+            StaminaBar.fillAmount = Stamina / MaxStamina;
+            yield return new WaitForSeconds(.005f);
         }
     }
 

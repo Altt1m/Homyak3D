@@ -35,14 +35,18 @@ public class EnemyController : MonoBehaviour
         seedsFound = false;
 
         TargetUpdate();
-        InvokeRepeating("UpdateTarget", 75f, 50f); // Вызываем функцию обновления цели каждые 120 секунд
+        InvokeRepeating("UpdateTarget", 10f, 50f); // Вызываем функцию обновления цели каждые 120 секунд
     }
 
     void UpdateTarget()
     {
         player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
-        navMeshAgent.SetDestination(player.position);
-        Debug.Log("New target set: " + player.name);
+        if (Vector3.Distance(targets.Find(n => n.name == "Target Hero Building").position, player.position) >= 20)
+        {
+            navMeshAgent.SetDestination(player.position);
+            Debug.Log("New target set: " + player.name);
+        }
+
     }
 
     //private void Awake()
