@@ -18,6 +18,11 @@ public class MonumentScript : MonoBehaviour
     private static int seedDown = 0;
     private static bool gameFinished = false;
 
+    public static bool GetGameFinished()
+    {
+        return gameFinished;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

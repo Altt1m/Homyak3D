@@ -41,7 +41,8 @@ public class EnemyController : MonoBehaviour
     void UpdateTarget()
     {
         player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
-        if (Vector3.Distance(targets.Find(n => n.name == "Target Hero Building").position, player.position) >= 20)
+        if (Vector3.Distance(targets.Find(n => n.name == "Target Hero Building").position, player.position) >= 20
+            && Vector3.Distance(targets.Find(n => n.name == "Target Abandoned House").position, player.position) >= 20)
         {
             navMeshAgent.SetDestination(player.position);
             Debug.Log("New target set: " + player.name);
@@ -183,7 +184,7 @@ public class EnemyController : MonoBehaviour
     void OnTriggerEnter()
     {
         // Проверяем, столкнулись ли мы с коллайдером игрока
-        if (distanceToPlayer < 2.5f && playerAlive)
+        if (distanceToPlayer < 2.5f && playerAlive && !MonumentScript.GetGameFinished())
         {
             audioSource.Stop(); audioSource.PlayOneShot(attacked);
             playerAlive = false;

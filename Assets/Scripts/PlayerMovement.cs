@@ -48,8 +48,8 @@ public class PlayerMovement : MonoBehaviour
 
         Stamina = 100f;
         MaxStamina = 100f;
-        RunCost = 8f;
-        ChargeRate = 15f;
+        RunCost = 10f;
+        ChargeRate = 20f;
     }
 
     private void Update()
